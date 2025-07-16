@@ -1,0 +1,127 @@
+{
+  "name": "breakeveninstaller",
+  "version": "1.0.0",
+  "main": "electron.js",
+  "scripts": {
+    "start": "concurrently \"react-scripts start\" \"wait-on http://localhost:3969 && node_modules\\.bin\\electron .\"",
+    "build": "react-scripts build",
+    "make": "electron-forge make",
+    "postinstall": "echo 'Suppressing Deprecate warnings...'"
+  },
+  "dependencies": {
+    "adm-zip": "^0.5.10",
+    "electron-squirrel-startup": "^1.0.1",
+    "fs-extra": "^11.1.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "^5.0.1",
+    "wait-on": "^7.0.1"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "^6.0.0-beta.61",
+    "@electron-forge/maker-deb": "^6.0.0-beta.61",
+    "@electron-forge/maker-dmg": "^6.0.0-beta.61",
+    "@electron-forge/maker-rpm": "^6.0.0-beta.61",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.61",
+    "@electron-forge/maker-zip": "^6.0.0-beta.61",
+    "concurrently": "^8.2.0",
+    "electron": "^25.3.1",
+    "electron-packager": "^17.1.1",
+    "eslint": "^8.57.1",
+    "react-scripts": "5.0.1",
+    "wait-on": "^7.0.1"
+  },
+  "homepage": "./",
+  "author": "thefakeliterate",
+  "productName": "breakeveninstaller",
+  "appId": "com.breakeventx.breakeveninstaller",
+  "description": "Installer for BreakEven Client",
+  "license": "thefakeliterate",
+  "engines": {
+    "node": ">=14.17.5"
+  },
+  "engineStrict": true,
+  "config": {
+    "forge": {
+      "packagerConfig": {
+        "out": "C:\\Users\\omeya\\OneDrive\\Desktop\\BREAKEVEN\\BreakEvenClient\\scripts\\out",
+        "icon": "assets/icon",
+        "executableName": "breakeveninstaller",
+        "asar": true,
+        "asarUnpack": [
+          "**/video-bg.mp4",
+          "**/BreakEvenClient_Template.zip"
+        ]
+      },
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "breakeveninstaller",
+            "authors": "Breakeven LLC",
+            "description": "Installer for BreakEven Client",
+            "exe": "breakeveninstaller.exe",
+            "setupIcon": "assets/icon.ico",
+            "shortcutName": "BreakEven Installer",
+            "setupExe": "BreakEven-Installer.exe",
+            "processStart": "breakeveninstaller.exe"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-dmg",
+          "config": {
+            "format": "ULFO",
+            "icon": "assets/icon.icns",
+            "overwrite": true
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {
+            "options": {
+              "name": "breakeveninstaller"
+            }
+          }
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {
+            "options": {
+              "name": "breakeveninstaller"
+            }
+          }
+        }
+      ],
+      "files": [
+        "assets/**/*",
+        "icon.ico",
+        "icon.png",
+        "electron.js",
+        "index.html",
+        "video-bg.mp4",
+        "asset-manifest.json",
+        "static/**/*",
+        "BreakEvenClient_Template.zip",
+        "package.json"
+      ]
+    }
+  }
+}
