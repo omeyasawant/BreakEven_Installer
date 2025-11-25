@@ -1,0 +1,10 @@
+node_modules/
+out/
+dist/
+build/
+*.log
+*.zip
+BreakEvenClient_Template/
+.env
+video-bg.mp4
+BreakEvenClient_Template.zip
