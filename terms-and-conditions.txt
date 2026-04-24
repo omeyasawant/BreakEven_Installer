@@ -1,0 +1,387 @@
+BREAKEVEN PRIVATE LIMITED
+SOFTWARE LICENSE AGREEMENT & TERMS OF USE
+
+(Legally Binding Agreement)
+
+Last Updated: April 2026
+
+This Software License Agreement and Terms of Use (“Agreement”) is a legally binding contract between you (“User”, “you”, or “your”) and Breakeven Private Limited, a company incorporated under the laws of India, having its principal place of business in Mumbai, Maharashtra, India (“Company”, “Breakeven”, “we”, “us”, or “our”).
+
+By clicking “Agree & Install”, downloading, installing, or using the software, you expressly acknowledge that you have read, understood, and agree to be bound by this Agreement.
+
+1. DEFINITIONS
+
+For the purposes of this Agreement:
+
+“Software” includes the installer, background services, executables, updates, and all associated components provided by Breakeven.
+“Services” refers to financial data processing, distributed computation, dashboard interfaces, and any related infrastructure.
+“Dashboard” refers to the graphical user interface (GUI) provided with the Software.
+“Tokens” refers to digital units issued or distributed within the Breakeven ecosystem.
+“User Data” refers to any data provided by the User, including name and optional email.
+2. LICENSE GRANT
+
+Subject to compliance with this Agreement, Breakeven grants you a:
+
+Limited
+Non-exclusive
+Non-transferable
+Revocable
+
+license to install and use the Software solely for its intended purposes.
+
+No ownership rights are transferred to you.
+
+3. USER INFORMATION & CONSENT
+
+During installation, the Software may request:
+
+Name (which may be pseudonymous or anonymous)
+Email address (optional)
+
+By proceeding:
+
+You consent to the collection and use of such data for system operation, communication, and service delivery
+You confirm that any information provided is lawful and not misleading
+4. SYSTEM-LEVEL OPERATIONS & PERMISSIONS
+
+You expressly acknowledge and consent that the Software may:
+
+Install background services
+Register system-level (administrator/root) services
+Execute processes on system startup (if enabled)
+Automatically download, install, or modify updates (if enabled)
+
+You grant explicit permission for such actions where required for functionality.
+
+5. AUTO-UPDATES AND MODIFICATIONS
+
+Breakeven reserves the right to:
+
+Modify, update, patch, or replace any part of the Software
+Add or remove features, components, or services
+Enforce updates for security or operational integrity
+
+Continued use of the Software constitutes acceptance of such changes.
+
+6. NATURE OF SERVICES
+
+The Software facilitates:
+
+Financial data processing and mining
+Distributed computational workloads
+Access to current and future dashboard-based services
+
+The Company makes no representation that:
+
+The Services will be uninterrupted, error-free, or profitable
+Any outputs generated are suitable for financial decision-making
+7. TOKEN DISCLAIMER (CRITICAL)
+
+Tokens distributed or referenced within the system:
+
+Are utility-based digital units used within the ecosystem
+Do not represent:
+Equity, ownership, or shares in the Company
+Any right to profits, dividends, or revenue
+Any investment contract or financial instrument
+
+You expressly acknowledge that:
+
+Tokens may have no monetary value
+Token mechanics, issuance, and utility are subject to ongoing modification
+No guarantee of liquidity, exchange listing, or value appreciation is provided
+
+This Agreement does not constitute:
+
+An offer of securities
+An invitation to invest
+A financial promotion under Indian or international law
+8. GLOBAL REGULATORY COMPLIANCE
+
+You are solely responsible for ensuring that your use of the Software and any interaction with Tokens:
+
+Complies with laws applicable in your jurisdiction
+Does not violate any financial, securities, tax, or digital asset regulations
+
+Breakeven makes no representation regarding legality in any specific jurisdiction.
+
+9. RESTRICTIONS ON USE
+
+You shall not:
+
+Reverse engineer, decompile, or modify the Software
+Interfere with system operations or network integrity
+Use the Software for unlawful or unauthorized purposes
+Attempt to exploit, manipulate, or abuse reward mechanisms
+
+Violation may result in:
+
+Immediate termination of access
+Suspension of rewards or tokens
+Legal action where applicable
+10. INTELLECTUAL PROPERTY
+
+All rights, title, and interest in and to the Software and Services, including:
+
+Source code
+Design
+Architecture
+Trademarks and branding
+
+remain the exclusive property of Breakeven.
+
+11. PRIVACY & DATA PROCESSING
+
+The Software may:
+
+Collect system performance data
+Monitor activity required for distributed computation
+Store minimal user-provided data
+
+Breakeven does not intentionally collect sensitive personal data beyond operational requirements.
+
+12. DISCLAIMER OF WARRANTIES
+
+To the maximum extent permitted by law:
+
+The Software and Services are provided “AS IS” and “AS AVAILABLE”, without warranties of any kind, including but not limited to:
+
+Fitness for a particular purpose
+Accuracy of results
+Continuous availability
+13. LIMITATION OF LIABILITY
+
+To the fullest extent permitted by law, Breakeven shall not be liable for:
+
+Any direct, indirect, incidental, or consequential damages
+Loss of profits, revenue, data, or system functionality
+Financial losses arising from use or reliance on outputs
+
+Total liability, if any, shall not exceed INR 1,000 or equivalent, whichever is lower.
+
+14. TERMINATION
+
+Breakeven reserves the right to:
+
+Suspend or terminate access at any time
+Revoke the license granted under this Agreement
+
+Upon termination:
+
+You must cease use of the Software
+All rights granted herein immediately terminate
+15. GOVERNING LAW & JURISDICTION
+
+This Agreement shall be governed by and construed in accordance with:
+
+The laws of India
+
+You agree that:
+
+Courts located in Mumbai, Maharashtra, India shall have exclusive jurisdiction
+16. SEVERABILITY
+
+If any provision of this Agreement is found invalid or unenforceable, the remaining provisions shall continue in full force and effect.
+
+17. ENTIRE AGREEMENT
+
+This Agreement constitutes the entire agreement between you and Breakeven regarding the Software and supersedes all prior understandings.
+
+18. ACKNOWLEDGEMENT & ACCEPTANCE
+
+By selecting “Agree & Install”, you confirm that:
+
+You have read and understood this Agreement
+You agree to all terms without limitation
+You consent to system-level operations and token-related conditions
+19. CONTACT & ADDITIONAL INFORMATION
+
+For further details, documentation, and updates:
+👉 breakeventx.com
+
+DDENDUM: DIGITAL TOKEN (SOLANA) & TAX COMPLIANCE TERMS
+20. BLOCKCHAIN NETWORK (SOLANA) DISCLOSURE
+
+The Breakeven token (“Token”) is implemented on the Solana blockchain network.
+
+By using the Software, you acknowledge that:
+
+Transactions occur on a public, decentralized blockchain
+Breakeven does not control:
+Network validation
+Transaction confirmation
+Network outages or congestion
+Transactions may be:
+Irreversible
+Subject to delays or failures
+Dependent on third-party infrastructure (validators, RPC providers, wallets)
+
+You are solely responsible for:
+
+Maintaining wallet security
+Managing private keys and recovery phrases
+Ensuring correct wallet addresses for transactions
+
+Loss of access to your wallet may result in permanent loss of tokens, for which Breakeven has no liability.
+
+21. TOKEN DISTRIBUTION & REWARD MECHANISM
+
+Tokens may be distributed as rewards for participation in:
+
+Data processing
+Computational contribution
+Network usage
+
+You acknowledge that:
+
+Token distribution is algorithmic and discretionary
+Breakeven may:
+Modify reward logic
+Adjust distribution rates
+Introduce caps, throttling, or eligibility criteria
+
+Tokens are not compensation, salary, or wages and do not establish any employment or partnership relationship.
+
+22. INDIAN TAXATION (VIRTUAL DIGITAL ASSETS – VDA)
+
+Under Indian law, including Section 115BBH of the Income Tax Act, 1961, Tokens may qualify as Virtual Digital Assets (VDA).
+
+22.1 Tax on Gains
+
+You acknowledge that:
+
+Any income arising from transfer of Tokens may be taxed at 30% (plus applicable surcharge and cess)
+No deduction is allowed except cost of acquisition (if applicable)
+22.2 Tax Deducted at Source (TDS)
+
+Where applicable:
+
+A 1% TDS under Section 194S may apply on transfer of Tokens
+Responsibility for compliance may fall on:
+The User
+The exchange/platform used
+Or other applicable intermediaries
+
+Breakeven does not guarantee TDS handling in all cases.
+
+23. REWARD TOKENS AS TAXABLE INCOME
+
+You acknowledge that:
+
+Tokens received as rewards may be treated as income at the time of receipt
+The fair market value (FMV) at the time of receipt may be considered taxable
+
+This may apply even if:
+
+Tokens are not sold
+Tokens are not converted into fiat currency
+24. USER TAX RESPONSIBILITY
+
+You are solely responsible for:
+
+Determining your tax obligations
+Reporting all income, gains, or transfers
+Maintaining transaction records
+Filing appropriate tax returns
+
+Breakeven:
+
+Does not provide tax advice
+Does not withhold taxes unless legally required
+Is not liable for your tax compliance
+
+You are advised to consult a qualified tax professional.
+
+25. GLOBAL REGULATORY VARIATION
+
+If you are located outside India:
+
+Your jurisdiction may classify Tokens as:
+Digital assets
+Commodities
+Securities (in some cases)
+
+You are solely responsible for ensuring compliance with:
+
+Local tax laws
+Securities regulations
+Crypto asset regulations
+
+Breakeven makes no representation regarding classification in any jurisdiction.
+
+26. NO INVESTMENT, NO EXPECTATION OF PROFIT
+
+You expressly acknowledge that:
+
+Tokens are not offered as investments
+There is no expectation of profit derived from the efforts of others
+The system is designed for utility and network participation only
+
+Any perceived value is:
+
+Market-driven
+External to Breakeven’s control
+27. WALLET & THIRD-PARTY INTEGRATIONS
+
+The Software may integrate with third-party wallets such as:
+
+Phantom Wallet or similar providers
+
+You acknowledge:
+
+Such services are independent third parties
+Breakeven does not control or guarantee:
+Wallet security
+Availability
+Compatibility
+
+Use of third-party services is at your own risk.
+
+28. TRANSACTION FEES (GAS / NETWORK FEES)
+
+Blockchain transactions may require:
+
+Network fees (“gas fees”) payable in SOL or other tokens
+
+You are solely responsible for:
+
+Maintaining sufficient balance
+Paying all applicable transaction fees
+
+Breakeven does not cover or reimburse such fees.
+
+29. TOKEN ECONOMICS & EVOLUTION
+
+You acknowledge that:
+
+Token mechanics are in continuous development
+Breakeven may modify:
+Supply mechanisms
+Utility functions
+Distribution models
+
+No guarantees are made regarding:
+
+Scarcity
+Value
+Utility persistence
+30. RISK DISCLOSURE (MANDATORY ACKNOWLEDGEMENT)
+
+You understand and accept that:
+
+Digital assets are high-risk and volatile
+Regulatory frameworks are evolving and uncertain
+Participation may result in:
+Financial loss
+Regulatory exposure
+Tax liabilities
+
+You participate entirely at your own risk.
+
+31. INDEMNIFICATION (CRYPTO & TAX)
+
+You agree to indemnify and hold harmless Breakeven from any claims arising out of:
+
+Your failure to comply with tax obligations
+Misuse of tokens or wallet infrastructure
+Violations of applicable crypto or financial regulations

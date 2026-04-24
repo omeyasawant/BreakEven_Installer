@@ -1,0 +1,306 @@
+name: Build Installer
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+
+    env:
+      INSTALLER_CONNECT_TIMEOUT_SECONDS: '120'
+      INSTALLER_VIDEO_BG_URL: 'https://data.breakeventx.com:64444/content-cache/updates/beta/video-bg.mp4?response-content-disposition=attachment%3B%20filename%3D%22video-bg.mp4%22&response-content-type=application%2Foctet-stream&AWSAccessKeyId=content_manager&Signature=TSqNpAWLrZboX9GV4PwBdZ0swtE%3D&Expires=1777067138'
+      INSTALLER_VIDEO_BG_URL_SOURCE: 'generated-presigned'
+      INSTALLER_TEMPLATE_URL_EXE: 'https://data.breakeventx.com:64444/content-cache/updates/beta/dashboard_dist/windows-latest/exe_BreakEvenClient_Template.zip?response-content-disposition=attachment%3B%20filename%3D%22exe_BreakEvenClient_Template.zip%22&response-content-type=application%2Foctet-stream&AWSAccessKeyId=content_manager&Signature=gJHuBipgUk1a4BEjl3yvssANBdQ%3D&Expires=1777067140'
+      INSTALLER_TEMPLATE_URL_DMG: 'https://data.breakeventx.com:64444/content-cache/updates/beta/dashboard_dist/macos-latest/dmg_BreakEvenClient_Template.zip?response-content-disposition=attachment%3B%20filename%3D%22dmg_BreakEvenClient_Template.zip%22&response-content-type=application%2Foctet-stream&AWSAccessKeyId=content_manager&Signature=dDfGpc3c06JPdfNs9T53NUkqYPQ%3D&Expires=1777067151'
+      INSTALLER_TEMPLATE_URL_DEB: 'https://data.breakeventx.com:64444/content-cache/updates/beta/dashboard_dist/ubuntu-latest/deb_BreakEvenClient_Template.zip?response-content-disposition=attachment%3B%20filename%3D%22deb_BreakEvenClient_Template.zip%22&response-content-type=application%2Foctet-stream&AWSAccessKeyId=content_manager&Signature=QYFtEhwfBxaJOHFJSla5OtlKtnU%3D&Expires=1777067158'
+      INSTALLER_TEMPLATE_URL_RPM: 'https://data.breakeventx.com:64444/content-cache/updates/beta/dashboard_dist/ubuntu-latest/rpm_BreakEvenClient_Template.zip?response-content-disposition=attachment%3B%20filename%3D%22rpm_BreakEvenClient_Template.zip%22&response-content-type=application%2Foctet-stream&AWSAccessKeyId=content_manager&Signature=CJ96I8sCmEbkPLEsRlwIAbrMgG8%3D&Expires=1777067167'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Linux Packaging Tools
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y dpkg rpm
+
+
+      - name: Install macOS Packaging Tools
+        if: runner.os == 'macOS'
+        run: brew install create-dmg || echo "create-dmg already installed"
+
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Debug asset connectivity (Windows)
+        if: runner.os == 'Windows'
+        continue-on-error: true
+        shell: pwsh
+        run: |
+          $socketUrl = "https://socket.breakeventx.com/download?kind=file&path=beta%2Fvideo-bg.mp4"
+
+          function Invoke-DebugCurl {
+            param(
+              [Parameter(Mandatory = $true)]
+              [string[]]$Arguments,
+              [Parameter(Mandatory = $true)]
+              [string]$Label
+            )
+
+            & curl.exe @Arguments
+            if ($LASTEXITCODE -ne 0) {
+              Write-Warning "$Label failed with exit code $LASTEXITCODE"
+              $global:LASTEXITCODE = 0
+            }
+          }
+
+          Write-Host "Runner OS: $env:RUNNER_OS"
+          Write-Host "Image OS: $env:ImageOS"
+          Write-Host "Image Version: $env:ImageVersion"
+          Write-Host "Workflow video URL source: $env:INSTALLER_VIDEO_BG_URL_SOURCE"
+
+          if ($env:INSTALLER_VIDEO_BG_URL_SOURCE -eq "generated-presigned" -and $env:INSTALLER_VIDEO_BG_URL) {
+            Write-Host "Generated presigned video URL: $env:INSTALLER_VIDEO_BG_URL"
+            Write-Host "Verbose GET against generated presigned video URL"
+            Invoke-DebugCurl -Arguments @('-v', '--connect-timeout', '20', '--max-time', '45', '-o', 'NUL', "$env:INSTALLER_VIDEO_BG_URL") -Label 'Generated presigned video URL probe'
+          } elseif ($env:INSTALLER_VIDEO_BG_URL) {
+            Write-Host "INSTALLER_VIDEO_BG_URL is set from secret or external env; value not echoed."
+          }
+
+          Write-Host "Resolving socket.breakeventx.com"
+          Resolve-DnsName socket.breakeventx.com
+
+          Write-Host "Resolving data.breakeventx.com"
+          Resolve-DnsName data.breakeventx.com
+
+          Write-Host "Testing TCP reachability to socket.breakeventx.com:443"
+          Test-NetConnection socket.breakeventx.com -Port 443
+
+          Write-Host "Testing TCP reachability to data.breakeventx.com:64444"
+          Test-NetConnection data.breakeventx.com -Port 64444
+
+          Write-Host "Verbose GET against socket download URL"
+          Invoke-DebugCurl -Arguments @('-v', '--connect-timeout', '20', '--max-time', '45', '-o', 'NUL', "$socketUrl") -Label 'Socket video URL probe'
+
+          Write-Host "Header/redirect inspection against socket download URL"
+          Invoke-DebugCurl -Arguments @('-I', '-s', '-S', '-L', '-D', '-', '-o', 'NUL', "$socketUrl") -Label 'Socket header probe'
+
+          $resolvedUrl = curl.exe -s -S -L -o NUL -w "%{url_effective}" "$socketUrl"
+          if ($LASTEXITCODE -ne 0) {
+            Write-Warning "Resolved URL probe failed with exit code $LASTEXITCODE"
+            $global:LASTEXITCODE = 0
+          }
+          Write-Host "Resolved download URL: $resolvedUrl"
+
+          Write-Host "Verbose GET against resolved download URL"
+          if ($resolvedUrl) {
+            Invoke-DebugCurl -Arguments @('-v', '--connect-timeout', '20', '--max-time', '45', '-o', 'NUL', "$resolvedUrl") -Label 'Resolved video URL probe'
+          }
+
+      - name: Debug asset connectivity (Linux/macOS)
+        if: runner.os != 'Windows'
+        continue-on-error: true
+        shell: bash
+        run: |
+          socket_url="https://socket.breakeventx.com/download?kind=file&path=beta%2Fvideo-bg.mp4"
+
+          echo "Runner OS: $RUNNER_OS"
+          uname -a || true
+          echo "Workflow video URL source: $INSTALLER_VIDEO_BG_URL_SOURCE"
+
+          if [ "$INSTALLER_VIDEO_BG_URL_SOURCE" = "generated-presigned" ] && [ -n "$INSTALLER_VIDEO_BG_URL" ]; then
+            echo "Generated presigned video URL: $INSTALLER_VIDEO_BG_URL"
+            echo "Verbose GET against generated presigned video URL"
+            curl -v --connect-timeout 20 --max-time 45 -o /dev/null "$INSTALLER_VIDEO_BG_URL" || true
+          elif [ -n "$INSTALLER_VIDEO_BG_URL" ]; then
+            echo "INSTALLER_VIDEO_BG_URL is set from secret or external env; value not echoed."
+          fi
+
+          echo "Resolving socket.breakeventx.com"
+          nslookup socket.breakeventx.com || true
+          getent hosts socket.breakeventx.com || true
+
+          echo "Resolving data.breakeventx.com"
+          nslookup data.breakeventx.com || true
+          getent hosts data.breakeventx.com || true
+
+          echo "Verbose GET against socket download URL"
+          curl -v --connect-timeout 20 --max-time 45 -o /dev/null "$socket_url" || true
+
+          echo "Header/redirect inspection against socket download URL"
+          curl -I -sS -L -D - -o /dev/null "$socket_url" || true
+
+          resolved_url="$(curl -sS -L -o /dev/null -w '%{url_effective}' "$socket_url")"
+          echo "Resolved download URL: $resolved_url"
+
+          echo "Verbose GET against resolved download URL"
+          curl -v --connect-timeout 20 --max-time 45 -o /dev/null "$resolved_url" || true
+
+      - name: Build distributables
+        run: node scripts/build-cross-platform.js
+        env:
+          INSTALLER_TEMPLATE_URL: ${{ secrets.INSTALLER_TEMPLATE_URL }}
+          INSTALLER_TEMPLATE_URL_EXE: ${{ secrets.INSTALLER_TEMPLATE_URL_EXE }}
+          INSTALLER_TEMPLATE_URL_DMG: ${{ secrets.INSTALLER_TEMPLATE_URL_DMG }}
+          INSTALLER_TEMPLATE_URL_DEB: ${{ secrets.INSTALLER_TEMPLATE_URL_DEB }}
+          INSTALLER_TEMPLATE_URL_RPM: ${{ secrets.INSTALLER_TEMPLATE_URL_RPM }}
+          INSTALLER_DOWNLOAD_TIMEOUT_MS: 1800000
+          INSTALLER_CURL_RETRY_COUNT: 6
+          INSTALLER_DOWNLOAD_ATTEMPTS_PER_URL: 10
+
+      - name: "Debug: List output contents (bash)"
+        if:  runner.os != 'Windows' 
+        continue-on-error: true
+        run: |
+          if [ -d out ]; then
+            echo "📂 Listing out/ contents"
+            find out -maxdepth 6 -print | sort
+          else
+            echo "⚠️ out/ directory does not exist yet. Listing workspace root instead."
+            pwd
+            find . -maxdepth 2 -mindepth 1 -print | sort
+          fi
+        shell: bash
+
+      - name: "Debug: List output contents (pwsh)"
+        if:  runner.os == 'Windows' 
+        continue-on-error: true
+        run: |
+          if (Test-Path -LiteralPath "out") {
+            Write-Host "📂 Listing out/ contents"
+            Get-ChildItem -Path "out" -Recurse -Force
+          } else {
+            Write-Warning "out/ directory does not exist yet. Listing workspace root instead."
+            Get-Location
+            Get-ChildItem -Force
+          }
+        shell: pwsh
+
+
+      - name: Confirm distributables (Linux/macOS)
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          echo "🧪 Checking distributables..."
+          search_roots=()
+          [ -d out/make ] && search_roots+=("out/make")
+          [ -d out ] && search_roots+=("out")
+          if [ ${#search_roots[@]} -eq 0 ]; then
+            echo "❌ No build output directory found under out/ or out/make. Failing build."
+            exit 1
+          fi
+          distributables_file="$(mktemp)"
+          trap 'rm -f "$distributables_file"' EXIT
+          find "${search_roots[@]}" -type f | grep -E '\.(dmg|AppImage|deb|rpm|zip|exe)$' | sort -u > "$distributables_file" || true
+          if [ ! -s "$distributables_file" ]; then
+            echo "❌ No distributables found. Failing build."
+            exit 1
+          fi
+          cat "$distributables_file"
+          grep -q '.dmg$' "$distributables_file" && echo "✅ Found .dmg" || true
+          grep -q '.AppImage$' "$distributables_file" && echo "✅ Found .AppImage" || true
+          grep -q '.deb$' "$distributables_file" && echo "✅ Found .deb" || true
+          grep -q '.rpm$' "$distributables_file" && echo "✅ Found .rpm" || true
+          grep -q '.zip$' "$distributables_file" && echo "✅ Found .zip" || true
+          grep -q '.exe$' "$distributables_file" && echo "✅ Found .exe" || true
+
+
+
+      - name: Confirm distributables (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          Write-Host "🧪 Checking distributables..."
+          $searchRoots = @()
+          if (Test-Path -LiteralPath "out/make") { $searchRoots += "out/make" }
+          if (Test-Path -LiteralPath "out") { $searchRoots += "out" }
+          if ($searchRoots.Count -eq 0) {
+            Write-Error "❌ No build output directory found under out/ or out/make. The build step likely failed before Electron Forge produced artifacts."
+            exit 1
+          }
+          $distributables = @($searchRoots | ForEach-Object {
+            Get-ChildItem -Path $_ -Recurse -File -Include *.exe,*.dmg,*.AppImage,*.deb,*.rpm,*.zip -ErrorAction SilentlyContinue
+          } | Sort-Object -Property FullName -Unique)
+          if (-not $distributables -or $distributables.Count -eq 0) {
+              Write-Error "❌ No distributables found. Failing build."
+              exit 1
+          }
+          $distributables | ForEach-Object { Write-Host $_.FullName }
+          if ($distributables.Extension -contains ".exe") { Write-Host "✅ Found .exe" }
+          if ($distributables.Extension -contains ".dmg") { Write-Host "✅ Found .dmg" }
+          if ($distributables.Extension -contains ".AppImage") { Write-Host "✅ Found .AppImage" }
+          if ($distributables.Extension -contains ".deb") { Write-Host "✅ Found .deb" }
+          if ($distributables.Extension -contains ".rpm") { Write-Host "✅ Found .rpm" }
+          if ($distributables.Extension -contains ".zip") { Write-Host "✅ Found .zip" }
+
+
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: installer-${{ matrix.os }}
+          path: |
+            out/**/*.exe
+            out/**/*.nupkg
+            out/**/RELEASES
+            out/**/*.dmg
+            out/**/*.AppImage
+            out/**/*.deb
+            out/**/*.rpm
+            out/**/*.zip
+
+  verify:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download All Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: all-platform-artifacts/
+
+      - name: List All Artifacts
+        run: ls -R all-platform-artifacts/
+
+      - name: Confirm artifact presence
+        shell: bash
+        run: |
+          echo "🧪 Verifying downloaded artifacts..."
+          count=$(find all-platform-artifacts -type f | grep -Ei '.(exe|dmg|AppImage|deb|rpm|zip)$' | wc -l)
+          if [ "$count" -lt 1 ]; then
+              echo "❌ No distributables found."
+              exit 1
+          fi
+          echo "✅ Found $count artifacts."
+
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: nightly
+          name: "Automated Installer Release"
+          draft: false
+          prerelease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Build Summary
+        run: |
+          echo "## ✅ Installer Summary" >> $GITHUB_STEP_SUMMARY
+          find all-platform-artifacts -type f >> $GITHUB_STEP_SUMMARY
